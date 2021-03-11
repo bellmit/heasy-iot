@@ -29,11 +29,12 @@ public abstract class AbstractMqttService implements MqttService{
     public static final int DEFAULT_INIT_CAPACITY = 10000;
     
     private LinkedBlockingQueue<JSONObject> queue;
+    private int initCapacity = DEFAULT_INIT_CAPACITY;
     private HandleThread handleThread;
     
 	@PostConstruct
 	public void init(){
-		queue = new LinkedBlockingQueue<>(DEFAULT_INIT_CAPACITY);
+		queue = new LinkedBlockingQueue<>(getInitCapacity());
 		
 		handleThread = new HandleThread();
 		handleThread.setDaemon(true);
@@ -112,11 +113,30 @@ public abstract class AbstractMqttService implements MqttService{
 	private void parseClientConnectedPackage(JSONObject jsonObject){
 		ClientConnectedPackage pck = new ClientConnectedPackage();
 		parseBaseInfo(pck, jsonObject);
+		parseConnProperties(pck, jsonObject);
 		pck.setPeername(JsonUtil.getString(jsonObject, "peername"));
 		pck.setSockname(JsonUtil.getString(jsonObject, "sockname"));
 		pck.setProto_name(JsonUtil.getString(jsonObject, "proto_name"));
 		pck.setProto_ver(JsonUtil.getFloat(jsonObject, "proto_ver"));
 		distributePackage(pck);
+	}
+
+	/**
+	 * 提取连接报文的用户属性
+	 */
+	private void parseConnProperties(BasePackage pck, JSONObject jsonObject) {
+		JSONObject object = jsonObject.getJSONObject("conn_props");
+		if(object != null && !object.isNullObject() && object.containsKey("User-Property-Pairs")){
+			JSONArray array = object.getJSONArray("User-Property-Pairs");
+			if(array != null){
+				for(int i=0; i<array.size(); i++){
+					JSONObject o = (JSONObject)array.get(i);
+					String key = JsonUtil.getString(o, "key");
+					String value = JsonUtil.getString(o, "value");
+					pck.getUserProperties().put(key, value);
+				}
+			}
+		}
 	}
 	
 	private void parseClientDisconnectedPackage(JSONObject jsonObject){
@@ -193,30 +213,19 @@ public abstract class AbstractMqttService implements MqttService{
 		pck.setUsername(JsonUtil.getString(jsonObject, "username"));
 		pck.setTimestamp(JsonUtil.getLong(jsonObject, "timestamp"));
 		pck.setNode(JsonUtil.getString(jsonObject, "node"));
-		parseUserProperties(pck, jsonObject);
-	}
-
-	/**
-	 * 提取用户属性
-	 */
-	private void parseUserProperties(BasePackage pck, JSONObject jsonObject) {
-		JSONObject object = jsonObject.getJSONObject("conn_props");
-		if(object != null && !object.isNullObject() && object.containsKey("User-Property-Pairs")){
-			JSONArray array = object.getJSONArray("User-Property-Pairs");
-			if(array != null){
-				for(int i=0; i<array.size(); i++){
-					JSONObject o = (JSONObject)array.get(i);
-					String key = JsonUtil.getString(o, "key");
-					String value = JsonUtil.getString(o, "value");
-					pck.getUserProperties().put(key, value);
-				}
-			}
-		}
 	}
 
 	/**
 	 * 分发数据包
 	 */
 	public abstract void distributePackage(Object pck);
+
+	public int getInitCapacity() {
+		return initCapacity;
+	}
+
+	public void setInitCapacity(int initCapacity) {
+		this.initCapacity = initCapacity;
+	}
 	
 }
