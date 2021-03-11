@@ -41,6 +41,51 @@ public class JsonUtil {
         return value;
     }
     
+    public static int getInt(JSONObject jsonObject, String key){
+    	int returnValue = 0;
+    	
+        try{
+        	if(jsonObject != null && jsonObject.containsKey(key)){
+                String value = StringUtil.trimToEmpty(jsonObject.getString(key));
+                returnValue = Integer.parseInt(value);
+            }
+        }catch(Exception ex){
+        	returnValue = 0;
+        }
+        
+        return returnValue;
+    }
+    
+    public static float getFloat(JSONObject jsonObject, String key){
+    	float returnValue = 0;
+    	
+        try{
+        	if(jsonObject != null && jsonObject.containsKey(key)){
+                String value = StringUtil.trimToEmpty(jsonObject.getString(key));
+                returnValue = Float.parseFloat(value);
+            }
+        }catch(Exception ex){
+        	returnValue = 0;
+        }
+        
+        return returnValue;
+    }
+    
+    public static long getLong(JSONObject jsonObject, String key){
+    	long returnValue = 0;
+    	
+        try{
+        	if(jsonObject != null && jsonObject.containsKey(key)){
+                String value = StringUtil.trimToEmpty(jsonObject.getString(key));
+                returnValue = Long.parseLong(value);
+            }
+        }catch(Exception ex){
+        	returnValue = 0;
+        }
+        
+        return returnValue;
+    }
+    
     public static String object2ArrayString(Object object) {
     	return JSONArray.fromObject(object).toString();
     }
@@ -59,9 +104,9 @@ public class JsonUtil {
         }
         
         if(jsonConfig != null) {
-        	return JSONObject.fromObject(object, jsonConfig).toString();
+        	return JSONObject.fromObject(object, jsonConfig).toString(2);
         }else {
-        	return JSONObject.fromObject(object).toString();
+        	return JSONObject.fromObject(object).toString(2);
         }
     }
 
