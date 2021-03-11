@@ -1,0 +1,54 @@
+<assembly>  
+	<!-- mvn clean assembly:assembly -->
+    <id>release</id> 
+     
+    <!-- 打包成zip文件 -->  
+    <formats>
+        <format>zip</format>  
+    </formats>
+  	
+  	<!-- 文件复制 -->
+    <fileSets>
+        <fileSet>  
+            <directory>/</directory>    
+            <includes>  
+                <include>run.bat</include>
+            </includes> 
+            <outputDirectory>/</outputDirectory> 
+        </fileSet>
+        
+        <fileSet>  
+            <directory>/target</directory>    
+            <includes>  
+                <include>knowroute.jar</include>
+            </includes> 
+            <outputDirectory>/</outputDirectory> 
+        </fileSet>
+        
+        <fileSet>
+            <directory>/src/main/resources</directory>  
+            <includes>
+                <include>*.xml</include>
+                <include>*.properties</include>
+                <include>*.p12</include>
+            </includes>   
+            <outputDirectory>/config</outputDirectory> 
+        </fileSet>
+        
+        <fileSet>
+            <directory>config</directory>  
+            <includes>
+                <include>knowroute.db</include>
+            </includes>   
+            <outputDirectory>/config</outputDirectory> 
+        </fileSet>
+        
+        <fileSet>
+            <directory>download</directory>  
+            <includes>
+                <include>me.txt</include>
+            </includes>   
+            <outputDirectory>/download</outputDirectory> 
+        </fileSet>
+    </fileSets>  
+</assembly>
