@@ -1,5 +1,7 @@
 package com.heasy.iot.emqx.collector.bean;
 
+import com.heasy.iot.emqx.collector.common.EventConstants;
+
 public class ClientConnectedPackage extends BasePackage{
 	private String peername; //客户端Socket ip:port
 	private String sockname; //服务端Socket ip:port
@@ -7,7 +9,7 @@ public class ClientConnectedPackage extends BasePackage{
 	private float proto_ver; //协议版本
 	
 	public ClientConnectedPackage(){
-		setEvent(BasePackage.EVENT_CLIENT_CONNECTED);
+		setEvent(EventConstants.EVENT_CLIENT_CONNECTED);
 	}
 	
 	public String getPeername() {

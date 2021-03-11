@@ -1,4 +1,4 @@
-package com.heasy.iot.emqx.collector.config;
+package com.heasy.iot.emqx.collector.common;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

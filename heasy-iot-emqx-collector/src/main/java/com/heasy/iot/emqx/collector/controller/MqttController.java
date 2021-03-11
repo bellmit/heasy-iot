@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heasy.iot.emqx.collector.service.MqttService;
+import com.heasy.iot.emqx.collector.sink.Sink;
+import com.heasy.iot.emqx.collector.sink.SinkFactory;
 import com.heasy.iot.emqx.collector.utils.JsonUtil;
 
 import net.sf.json.JSONObject;
@@ -18,14 +19,14 @@ import net.sf.json.JSONObject;
  * 用于接收EMQX通过WebHook推送过来的报文数据
  */
 @RestController
-public class MqttController extends BaseController{
+public class MqttController{
     private static final Logger logger = LoggerFactory.getLogger(MqttController.class);
     
     @Autowired
-    private MqttService mqttService;
+	private SinkFactory sinkFactory;
     
 	@RequestMapping(value="/collect", method=RequestMethod.POST)
-	public ResponseEntity<String> test(@RequestBody String content){
+	public ResponseEntity<String> collect(@RequestBody String content){
 		logger.debug(content);
 		
 		JSONObject jsonObject = null;
@@ -35,8 +36,13 @@ public class MqttController extends BaseController{
 			logger.error(ex.toString());
 		}
 		
-		if(jsonObject != null){
-			mqttService.handlePackage(jsonObject);
+		if(jsonObject != null && !jsonObject.isNullObject()){
+			Sink sink = sinkFactory.getSink();
+			if(sink != null){
+				sink.process(jsonObject);
+			}else{
+				logger.error("sink not found");
+			}
 		}
 		
 		return ResponseEntity.ok(null);

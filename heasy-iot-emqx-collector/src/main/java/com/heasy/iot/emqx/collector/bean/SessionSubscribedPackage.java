@@ -1,12 +1,14 @@
 package com.heasy.iot.emqx.collector.bean;
 
+import com.heasy.iot.emqx.collector.common.EventConstants;
+
 public class SessionSubscribedPackage extends BasePackage{
 	private String peerhost; //客户端ip
 	private String topic; //主题名
 	private int qos; //服务质量等级
 	
 	public SessionSubscribedPackage(){
-		setEvent(BasePackage.EVENT_SESSION_SUBSCRIBED);
+		setEvent(EventConstants.EVENT_SESSION_SUBSCRIBED);
 	}
 	
 	public String getPeerhost() {

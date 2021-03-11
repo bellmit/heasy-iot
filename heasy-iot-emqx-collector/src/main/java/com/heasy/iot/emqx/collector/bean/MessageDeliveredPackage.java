@@ -1,5 +1,7 @@
 package com.heasy.iot.emqx.collector.bean;
 
+import com.heasy.iot.emqx.collector.common.EventConstants;
+
 public class MessageDeliveredPackage extends BasePackage{
 	private String id;
 	private String peerhost;
@@ -11,7 +13,7 @@ public class MessageDeliveredPackage extends BasePackage{
 	private String from_clientid;
 	
 	public MessageDeliveredPackage(){
-		setEvent(BasePackage.EVENT_MESSAGE_DELIVERED);
+		setEvent(EventConstants.EVENT_MESSAGE_DELIVERED);
 	}
 	
 	public String getId() {
