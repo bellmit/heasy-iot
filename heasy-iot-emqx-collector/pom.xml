@@ -98,6 +98,19 @@
 	    <groupId>javax.annotation</groupId>
 	    <artifactId>javax.annotation-api</artifactId>
 	</dependency>
+	
+	<!-- Mysql -->
+	<dependency>
+    	<groupId>mysql</groupId>
+    	<artifactId>mysql-connector-java</artifactId>
+    	<version>5.1.49</version>
+	</dependency>
+	<!-- 框架默认注入 DataSourceTransactionManager 实例 -->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-jdbc</artifactId>
+	</dependency>
+	
   </dependencies>
   
   <build>

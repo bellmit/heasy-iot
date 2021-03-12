@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.heasy.iot.emqx.collector.parser.Parser;
 import com.heasy.iot.emqx.collector.parser.ParserFactory;
@@ -18,13 +19,15 @@ import net.sf.json.JSONObject;
 public abstract class AbstractSink implements Sink{
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSink.class);
 
+	@Autowired
 	private ParserFactory parserFactory;
+	
     private int capacity = 1000;
     private LinkedBlockingQueue<JSONObject> queue;
     private SinkRunner sinkRunner;
     
     @Override
-    public void init() {
+    public void afterPropertiesSet() throws Exception {
 		queue = new LinkedBlockingQueue<>(this.capacity);
 		
 		sinkRunner = new SinkRunner();
@@ -32,8 +35,8 @@ public abstract class AbstractSink implements Sink{
 		sinkRunner.start();
 		
 		logger.info("init " + this.getClass().getSimpleName());
-    }    
-	
+    }
+    
 	@Override
 	public void process(JSONObject jsonObject) {
 		try {
@@ -43,8 +46,8 @@ public abstract class AbstractSink implements Sink{
 		}
 	}
 
-    @Override
-    public void destroy() {
+	@Override
+	public void destroy() throws Exception {
 		if(queue != null){
 			queue.clear();
 			queue = null;
@@ -57,7 +60,7 @@ public abstract class AbstractSink implements Sink{
 		}
 		
 		logger.info("destroy " + this.getClass().getSimpleName());
-    }
+	}
 	
 	class SinkRunner extends Thread{
 		private AtomicBoolean running = new AtomicBoolean(true);
@@ -98,11 +101,6 @@ public abstract class AbstractSink implements Sink{
 	public void setQueueCapacity(int capacity) {
 		this.capacity = capacity;
 		logger.debug("capacity=" + capacity);
-	}
-	
-	@Override
-	public void setParserFactory(ParserFactory parserFactory) {
-		this.parserFactory = parserFactory;
 	}
 	
 	public abstract void doSink(Object pck);

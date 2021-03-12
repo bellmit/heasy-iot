@@ -5,7 +5,7 @@ import com.heasy.iot.emqx.collector.common.EventConstants;
 public class MessageDroppedPackage extends BasePackage{
 	private String id;
 	private String peerhost;
-	private long received_at;
+	private long publish_received_at;
 	private String topic;
 	private int qos;
 	private String payload;
@@ -31,12 +31,12 @@ public class MessageDroppedPackage extends BasePackage{
 		this.peerhost = peerhost;
 	}
 	
-	public long getReceived_at() {
-		return received_at;
+	public long getPublish_received_at() {
+		return publish_received_at;
 	}
 	
-	public void setReceived_at(long received_at) {
-		this.received_at = received_at;
+	public void setPublish_received_at(long publish_received_at) {
+		this.publish_received_at = publish_received_at;
 	}
 	
 	public String getTopic() {
