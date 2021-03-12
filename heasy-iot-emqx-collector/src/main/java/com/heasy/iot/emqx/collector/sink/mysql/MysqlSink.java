@@ -22,23 +22,25 @@ public class MysqlSink extends AbstractSink{
 	private MysqlSinkDao dao;
 	
 	@Override
-	public void doSink(Object pck) {
-		logger.info("解析后的报文：\n" + JSONObject.fromObject(pck).toString(2));
+	public void doSink(JSONObject sourcePackage, Object parsedPackage) {
+		logger.info("解析后的报文：\n" + JSONObject.fromObject(parsedPackage).toString(2));
 		
-		if(pck instanceof ClientConnectedPackage){
-			dao.insertClientConnectedPackage((ClientConnectedPackage)pck);
-		}else if(pck instanceof ClientDisconnectedPackage){
-			dao.insertClientDisconnectedPackage((ClientDisconnectedPackage)pck);
-		}else if(pck instanceof SessionSubscribedPackage){
-			dao.insertSessionSubscribedPackage((SessionSubscribedPackage)pck);
-		}else if(pck instanceof SessionUnsubscribedPackage){
-			dao.insertSessionUnsubscribedPackage((SessionUnsubscribedPackage)pck);
-		}else if(pck instanceof MessageDeliveredPackage){
-			dao.insertMessageDeliveredPackage((MessageDeliveredPackage)pck);
-		}else if(pck instanceof MessageAckedPackage){
-			dao.insertMessageAckedPackage((MessageAckedPackage)pck);
-		}else if(pck instanceof MessageDroppedPackage){
-			dao.insertMessageDroppedPackage((MessageDroppedPackage)pck);
+		if(parsedPackage instanceof ClientConnectedPackage){
+			dao.insertClientConnectedPackage((ClientConnectedPackage)parsedPackage);
+		}else if(parsedPackage instanceof ClientDisconnectedPackage){
+			dao.insertClientDisconnectedPackage((ClientDisconnectedPackage)parsedPackage);
+		}else if(parsedPackage instanceof SessionSubscribedPackage){
+			dao.insertSessionSubscribedPackage((SessionSubscribedPackage)parsedPackage);
+		}else if(parsedPackage instanceof SessionUnsubscribedPackage){
+			dao.insertSessionUnsubscribedPackage((SessionUnsubscribedPackage)parsedPackage);
+		}else if(parsedPackage instanceof MessageDeliveredPackage){
+			dao.insertMessageDeliveredPackage((MessageDeliveredPackage)parsedPackage);
+		}else if(parsedPackage instanceof MessageAckedPackage){
+			dao.insertMessageAckedPackage((MessageAckedPackage)parsedPackage);
+		}else if(parsedPackage instanceof MessageDroppedPackage){
+			dao.insertMessageDroppedPackage((MessageDroppedPackage)parsedPackage);
+		}else{
+			logger.error("Package not support: " + parsedPackage.getClass().getName());
 		}
 	}
 

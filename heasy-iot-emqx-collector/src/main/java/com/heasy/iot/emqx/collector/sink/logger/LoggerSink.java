@@ -11,7 +11,7 @@ public class LoggerSink extends AbstractSink{
 	private static final Logger logger = LoggerFactory.getLogger(LoggerSink.class);
 	
 	@Override
-	public void doSink(Object pck) {
-		logger.info("解析后的报文：\n" + JSONObject.fromObject(pck).toString(4));
+	public void doSink(JSONObject sourcePackage, Object parsedPackage) {
+		logger.info("解析后的报文：\n" + JSONObject.fromObject(parsedPackage).toString(4));
 	}
 }

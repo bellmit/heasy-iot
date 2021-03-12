@@ -80,7 +80,7 @@ public abstract class AbstractSink implements Sink{
 					Parser parser = parserFactory.getParser(parserName);
 					if(parser != null){
 						Object pck = parser.process(jsonObject);
-						doSink(pck);
+						doSink(jsonObject, pck);
 					}else{
 						logger.error("parser not found: " + parserName);
 					}
@@ -103,6 +103,6 @@ public abstract class AbstractSink implements Sink{
 		logger.debug("capacity=" + capacity);
 	}
 	
-	public abstract void doSink(Object pck);
+	public abstract void doSink(JSONObject sourcePackage, Object parsedPackage);
 	
 }
