@@ -10,7 +10,7 @@ public class MessageDroppedParser extends AbstractParser<MessageDroppedPackage>{
 	public MessageDroppedPackage process(JSONObject jsonObject) {
 		MessageDroppedPackage pck = new MessageDroppedPackage();
 		parseBaseInfo(pck, jsonObject);
-		pck.setId(JsonUtil.getString(jsonObject, "id"));
+		pck.setMessageid(JsonUtil.getString(jsonObject, "id"));
 		pck.setPeerhost(JsonUtil.getString(jsonObject, "peerhost"));
 		pck.setPublish_received_at(JsonUtil.getLong(jsonObject, "publish_received_at"));
 		pck.setTopic(JsonUtil.getString(jsonObject, "topic"));

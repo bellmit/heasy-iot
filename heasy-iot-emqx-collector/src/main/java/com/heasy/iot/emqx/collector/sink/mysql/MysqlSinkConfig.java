@@ -2,7 +2,6 @@ package com.heasy.iot.emqx.collector.sink.mysql;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -11,12 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.heasy.iot.emqx.collector.sink.BaseConfig;
+
 @Configuration
 @PropertySource("classpath:collector.properties")
-public class MysqlSinkConfig{
-	@Value("${sink.queueCapacity}")
-	private int queueCapacity;
-	
+public class MysqlSinkConfig extends BaseConfig{
+	private static final String SINK_MYSQL = "mysql";
+
 	@Bean
 	@ConfigurationProperties(prefix="sink.mysql.datasource")
 	public DataSource dataSource() {
@@ -29,16 +29,16 @@ public class MysqlSinkConfig{
     }
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue="mysql")
+	@ConditionalOnProperty(name="sink.type", havingValue=SINK_MYSQL)
 	public MysqlSinkDao mysqlSinkDao(){
 		return new MysqlSinkDao();
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue="mysql")
+	@ConditionalOnProperty(name="sink.type", havingValue=SINK_MYSQL)
 	public MysqlSink createSink(){
 		MysqlSink sink = new MysqlSink();
-		sink.setQueueCapacity(queueCapacity);
+		sink.setQueueCapacity(getQueueCapacity());
 		return sink;
 	}
 }

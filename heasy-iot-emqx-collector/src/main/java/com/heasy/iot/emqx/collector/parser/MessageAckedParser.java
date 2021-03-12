@@ -10,7 +10,7 @@ public class MessageAckedParser extends AbstractParser<MessageAckedPackage>{
 	public MessageAckedPackage process(JSONObject jsonObject) {
 		MessageAckedPackage pck = new MessageAckedPackage();
 		parseBaseInfo(pck, jsonObject);
-		pck.setId(JsonUtil.getString(jsonObject, "id"));
+		pck.setMessageid(JsonUtil.getString(jsonObject, "id"));
 		pck.setPeerhost(JsonUtil.getString(jsonObject, "peerhost"));
 		pck.setPublish_received_at(JsonUtil.getLong(jsonObject, "publish_received_at"));
 		pck.setTopic(JsonUtil.getString(jsonObject, "topic"));

@@ -22,7 +22,7 @@ public abstract class AbstractSink implements Sink{
 	@Autowired
 	private ParserFactory parserFactory;
 	
-    private int capacity = 1000;
+    private int capacity = 100;
     private LinkedBlockingQueue<JSONObject> queue;
     private SinkRunner sinkRunner;
     

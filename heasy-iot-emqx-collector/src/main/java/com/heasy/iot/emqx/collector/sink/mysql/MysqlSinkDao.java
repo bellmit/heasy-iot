@@ -40,7 +40,7 @@ public class MysqlSinkDao {
 	public void insertMessageDeliveredPackage(MessageDeliveredPackage pck){
 		String sql = "insert into message_delivered(clientid,username,node,timestamp,peerhost,topic,qos,payload,mid,publish_received_at,from_username,from_clientid) values (?,?,?,?,?,?,?,?,?,?,?,?)";
     	jdbcTemplate.update(sql, pck.getClientid(), pck.getUsername(), pck.getNode(), pck.getTimestamp(),
-    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getId(), 
+    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getMessageid(), 
     			pck.getPublish_received_at(), pck.getFrom_username(), pck.getFrom_clientid());
 	}
 
@@ -48,7 +48,7 @@ public class MysqlSinkDao {
 	public void insertMessageAckedPackage(MessageAckedPackage pck){
 		String sql = "insert into message_acked(clientid,username,node,timestamp,peerhost,topic,qos,payload,mid,publish_received_at,from_username,from_clientid) values (?,?,?,?,?,?,?,?,?,?,?,?)";
     	jdbcTemplate.update(sql, pck.getClientid(), pck.getUsername(), pck.getNode(), pck.getTimestamp(),
-    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getId(), 
+    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getMessageid(), 
     			pck.getPublish_received_at(), pck.getFrom_username(), pck.getFrom_clientid());
 	}
 
@@ -56,7 +56,7 @@ public class MysqlSinkDao {
 	public void insertMessageDroppedPackage(MessageDroppedPackage pck){
 		String sql = "insert into message_dropped(clientid,username,node,timestamp,peerhost,topic,qos,payload,mid,publish_received_at,reason) values (?,?,?,?,?,?,?,?,?,?,?)";
     	jdbcTemplate.update(sql, pck.getClientid(), pck.getUsername(), pck.getNode(), pck.getTimestamp(),
-    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getId(), 
+    			pck.getPeerhost(), pck.getTopic(), pck.getQos(), pck.getPayload(), pck.getMessageid(), 
     			pck.getPublish_received_at(), pck.getReason());
 	}
 

@@ -3,7 +3,7 @@ package com.heasy.iot.emqx.collector.bean;
 import com.heasy.iot.emqx.collector.common.EventConstants;
 
 public class MessageDroppedPackage extends BasePackage{
-	private String id;
+	private String messageid;
 	private String peerhost;
 	private long publish_received_at;
 	private String topic;
@@ -15,12 +15,12 @@ public class MessageDroppedPackage extends BasePackage{
 		setEvent(EventConstants.EVENT_MESSAGE_DROPPED);
 	}
 	
-	public String getId() {
-		return id;
+	public String getMessageid() {
+		return messageid;
 	}
 	
-	public void setId(String id) {
-		this.id = id;
+	public void setMessageid(String messageid) {
+		this.messageid = messageid;
 	}
 	
 	public String getPeerhost() {

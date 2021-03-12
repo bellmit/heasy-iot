@@ -10,7 +10,7 @@ public class MessageDeliveredParser extends AbstractParser<MessageDeliveredPacka
 	public MessageDeliveredPackage process(JSONObject jsonObject) {
 		MessageDeliveredPackage pck = new MessageDeliveredPackage();
 		parseBaseInfo(pck, jsonObject);
-		pck.setId(JsonUtil.getString(jsonObject, "id"));
+		pck.setMessageid(JsonUtil.getString(jsonObject, "id"));
 		pck.setPeerhost(JsonUtil.getString(jsonObject, "peerhost"));
 		pck.setPublish_received_at(JsonUtil.getLong(jsonObject, "publish_received_at"));
 		pck.setTopic(JsonUtil.getString(jsonObject, "topic"));
