@@ -1,4 +1,4 @@
-package com.heasy.iot.emqx.collector.sink;
+package com.heasy.iot.emqx.collector.sink.logger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

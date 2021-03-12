@@ -1,4 +1,4 @@
-package com.heasy.iot.emqx.collector.sink;
+package com.heasy.iot.emqx.collector.sink.mysql;
 
 import javax.sql.DataSource;
 
