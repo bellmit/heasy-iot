@@ -69,6 +69,8 @@ public class MysqlSinkDao {
 
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public void insertSessionUnsubscribedPackage(SessionUnsubscribedPackage pck){
-		
+		String sql = "insert into session_unsubscribed(clientid,username,node,timestamp,peerhost,topic,qos) values (?,?,?,?,?,?,?)";
+    	jdbcTemplate.update(sql, pck.getClientid(), pck.getUsername(), pck.getNode(), pck.getTimestamp(),
+    			pck.getPeerhost(), pck.getTopic(), pck.getQos());
 	}
 }

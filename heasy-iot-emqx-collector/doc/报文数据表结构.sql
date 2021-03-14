@@ -40,6 +40,19 @@ CREATE TABLE `session_subscribed` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `session_unsubscribed` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `clientid` varchar(50) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  `node` varchar(50) DEFAULT NULL,
+  `timestamp` bigint DEFAULT NULL,
+  `peerhost` varchar(50) DEFAULT NULL,
+  `topic` varchar(100) DEFAULT NULL,
+  `qos` tinyint(1) DEFAULT 0,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `message_delivered` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `clientid` varchar(50) DEFAULT NULL,

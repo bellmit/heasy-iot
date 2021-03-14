@@ -1,2 +1,3 @@
 /heasy-iot-emqx-collector/logs
 /heasy-iot-emqx-collector/target
+/heasy-iot-emqx-client-sdk/target
