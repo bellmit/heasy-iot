@@ -4,14 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.heasy.iot.emqx.collector.sink.AbstractSink;
+import com.heasy.iot.emqx.collector.sink.Sink;
 
 import net.sf.json.JSONObject;
 
 public class LoggerSink extends AbstractSink{
 	private static final Logger logger = LoggerFactory.getLogger(LoggerSink.class);
 	
+	public LoggerSink(){
+		super(Sink.SINK_LOGGER);
+	}
+	
 	@Override
-	public void doSink(JSONObject sourcePackage, Object parsedPackage) {
-		logger.info("解析后的报文：\n" + JSONObject.fromObject(parsedPackage).toString(4));
+	public void process(Object object) {
+		logger.info("logger sink process：\n" + JSONObject.fromObject(object).toString(2));
 	}
 }

@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heasy.iot.emqx.collector.sink.Sink;
+import com.heasy.iot.emqx.collector.channel.Channel;
+import com.heasy.iot.emqx.collector.channel.ChannelFactory;
 import com.heasy.iot.emqx.collector.utils.JsonUtil;
 
 import net.sf.json.JSONObject;
@@ -22,7 +23,7 @@ public class MqttController{
     private static final Logger logger = LoggerFactory.getLogger(MqttController.class);
     
     @Autowired
-	private Sink sink;
+	private ChannelFactory channelFactory;
     
 	@RequestMapping(value="/collect", method=RequestMethod.POST, consumes="application/json;charset=utf-8")
 	public ResponseEntity<String> collect(@RequestBody String content){
@@ -35,10 +36,12 @@ public class MqttController{
 			logger.error(ex.toString());
 		}
 		
-		if(sink != null){
-			sink.process(jsonObject);
+		Channel channel = channelFactory.getChannel();
+		if(channel != null){
+			logger.debug("put data to channel: " + channel.getName());
+			channel.put(jsonObject);
 		}else{
-			logger.error("sink not found");
+			logger.error("channel not found!");
 		}
 		
 		return ResponseEntity.ok(null);

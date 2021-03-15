@@ -104,9 +104,9 @@ public class JsonUtil {
         }
         
         if(jsonConfig != null) {
-        	return JSONObject.fromObject(object, jsonConfig).toString();
+        	return JSONObject.fromObject(object, jsonConfig).toString(2);
         }else {
-        	return JSONObject.fromObject(object).toString();
+        	return JSONObject.fromObject(object).toString(2);
         }
     }
 

@@ -1,11 +1,14 @@
 package com.heasy.iot.emqx.collector.sink;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+import com.heasy.iot.emqx.collector.channel.Channel;
 
-import net.sf.json.JSONObject;
-
-public interface Sink extends InitializingBean, DisposableBean{
-    void process(JSONObject jsonObject);
-    void setQueueCapacity(int capacity);
+public interface Sink{
+	public static final String SINK_LOGGER = "logger";
+	public static final String SINK_MYSQL = "mysql";
+	public static final String SINK_MONGODB = "mongodb";
+	
+	String getName();
+	Channel getChannel();
+	void setChannel(Channel channel);
+    void process(Object object);
 }

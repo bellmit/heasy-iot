@@ -2,6 +2,8 @@ package com.heasy.iot.emqx.collector.sink.mysql;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -10,12 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.heasy.iot.emqx.collector.sink.BaseConfig;
+import com.heasy.iot.emqx.collector.channel.ChannelFactory;
+import com.heasy.iot.emqx.collector.sink.Sink;
 
 @Configuration
 @PropertySource("classpath:collector.properties")
-public class MysqlSinkConfig extends BaseConfig{
-	private static final String SINK_MYSQL = "mysql";
+public class MysqlSinkConfig{
+    private static final Logger logger = LoggerFactory.getLogger(MysqlSinkConfig.class);
 
 	@Bean
 	@ConfigurationProperties(prefix="sink.mysql.datasource")
@@ -24,21 +27,22 @@ public class MysqlSinkConfig extends BaseConfig{
 	}
 	
 	@Bean
-    public JdbcTemplate sqliteJdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=SINK_MYSQL)
-	public MysqlSinkDao mysqlSinkDao(){
-		return new MysqlSinkDao();
+	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_MYSQL)
+	public MysqlSink createSink(ChannelFactory channelFactory){
+		logger.debug("create MysqlSink: " + channelFactory);
+		MysqlSink sink = new MysqlSink();
+		sink.setChannel(channelFactory.getChannel());
+		return sink;
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=SINK_MYSQL)
-	public MysqlSink createSink(){
-		MysqlSink sink = new MysqlSink();
-		sink.setQueueCapacity(getQueueCapacity());
-		return sink;
+	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_MYSQL)
+	public MysqlSinkDao mysqlSinkDao(){
+		return new MysqlSinkDao();
 	}
 }

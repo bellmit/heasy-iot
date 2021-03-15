@@ -17,7 +17,7 @@ public class Publisher{
 		publisher.connect();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		MqttMessage message = publisher.createMessage(sdf.format(new Date()));
+		MqttMessage message = publisher.createMessage("18218324742请求添加您为好友！");
 		publisher.publish("user/13798189352", message);
 		publisher.destroy();
 	}
