@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.heasy.iot.emqx.collector.sink.AbstractSink;
-import com.heasy.iot.emqx.collector.sink.Sink;
 import com.heasy.iot.emqx.collector.utils.JsonUtil;
 
 import net.sf.json.JSONArray;
@@ -13,12 +12,14 @@ import net.sf.json.JSONObject;
 
 public class MysqlSink extends AbstractSink{
 	private static final Logger logger = LoggerFactory.getLogger(MysqlSink.class);
+	public static final String SINK_MYSQL = "mysql";
 	
 	@Autowired
 	private MysqlSinkDao dao;
+
 	
 	public MysqlSink(){
-		super(Sink.SINK_MYSQL);
+		super(MysqlSink.SINK_MYSQL);
 	}
 	
 	@Override

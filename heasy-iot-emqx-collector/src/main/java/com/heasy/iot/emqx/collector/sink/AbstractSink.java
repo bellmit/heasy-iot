@@ -9,6 +9,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.heasy.iot.emqx.collector.channel.Channel;
+import com.heasy.iot.emqx.collector.channel.ChannelFactory;
 import com.heasy.iot.emqx.collector.utils.JsonUtil;
 
 public abstract class AbstractSink implements Sink, InitializingBean, DisposableBean{
@@ -16,7 +17,7 @@ public abstract class AbstractSink implements Sink, InitializingBean, Disposable
 
 	private String name;
     private SinkRunner sinkRunner;
-    private Channel channel;
+    private ChannelFactory channelFactory;
     
     public AbstractSink(String name){
     	this.name = name;
@@ -45,8 +46,9 @@ public abstract class AbstractSink implements Sink, InitializingBean, Disposable
 		public void run() {
 			while(running.get()){
 				try{
-					if(getChannel() != null){
-						Object object = getChannel().take();
+					Channel channel = getChannelFactory().getChannel();
+					if(channel != null){
+						Object object = channel.take();
 						logger.debug("take data：\n" + JsonUtil.object2String(object));
 						process(object);
 					}else{
@@ -71,15 +73,13 @@ public abstract class AbstractSink implements Sink, InitializingBean, Disposable
 	public String getName() {
 		return name;
 	}
-	
-	@Override
-	public Channel getChannel() {
-		return this.channel;
+
+	public ChannelFactory getChannelFactory() {
+		return channelFactory;
 	}
 
-	@Override
-	public void setChannel(Channel channel) {
-		this.channel = channel;
+	public void setChannelFactory(ChannelFactory channelFactory) {
+		this.channelFactory = channelFactory;
 	}
 	
 }

@@ -7,17 +7,24 @@ import org.slf4j.LoggerFactory;
 
 public class MemoryChannel extends AbstractChannel {
 	private static final Logger logger = LoggerFactory.getLogger(MemoryChannel.class);
+	public static final String CHANNEL_MEMORY = "memory";
 	
     private int capacity = 100;
     private LinkedBlockingQueue<Object> queue;
+    private boolean updateState = false;
     
     public MemoryChannel(){
-    	setName(Channel.CHANNEL_MEMORY);
+    	setName(CHANNEL_MEMORY);
     }
     
     @Override
     public synchronized void start() {
-    	super.start();
+    	if(updateState){
+    		super.start();
+    	}else{
+    		updateState = true;
+    	}
+    	
 		queue = new LinkedBlockingQueue<>(this.capacity);
 		logger.info(this.getClass().getSimpleName() + " started!");
     }
@@ -25,7 +32,9 @@ public class MemoryChannel extends AbstractChannel {
 	@Override
 	public void put(Object object) {
 		try {
-			queue.put(object); //堵塞
+			if(object != null){
+				queue.put(object); //堵塞
+			}
 		} catch (Exception ex) {
 			setLifecycleState(LifecycleState.ERROR);
 			logger.error("", ex);

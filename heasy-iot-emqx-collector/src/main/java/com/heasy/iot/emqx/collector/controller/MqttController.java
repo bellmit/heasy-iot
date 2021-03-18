@@ -25,7 +25,7 @@ public class MqttController{
     @Autowired
 	private ChannelFactory channelFactory;
     
-	@RequestMapping(value="/collect", method=RequestMethod.POST, consumes="application/json;charset=utf-8")
+	@RequestMapping(value="/collect", method=RequestMethod.POST)
 	public ResponseEntity<String> collect(@RequestBody String content){
 		logger.debug(content);
 		
@@ -38,8 +38,10 @@ public class MqttController{
 		
 		Channel channel = channelFactory.getChannel();
 		if(channel != null){
-			logger.debug("put data to channel: " + channel.getName());
-			channel.put(jsonObject);
+			if(jsonObject != null){
+				logger.debug("put data to channel: " + channel.getName());
+				channel.put(jsonObject);
+			}
 		}else{
 			logger.error("channel not found!");
 		}

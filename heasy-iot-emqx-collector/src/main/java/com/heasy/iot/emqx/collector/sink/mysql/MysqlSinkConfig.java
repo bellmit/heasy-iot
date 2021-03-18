@@ -13,7 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.heasy.iot.emqx.collector.channel.ChannelFactory;
-import com.heasy.iot.emqx.collector.sink.Sink;
 
 @Configuration
 @PropertySource("classpath:collector.properties")
@@ -32,16 +31,16 @@ public class MysqlSinkConfig{
     }
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_MYSQL)
+	@ConditionalOnProperty(name="sink.type", havingValue=MysqlSink.SINK_MYSQL)
 	public MysqlSink createSink(ChannelFactory channelFactory){
 		logger.debug("create MysqlSink: " + channelFactory);
 		MysqlSink sink = new MysqlSink();
-		sink.setChannel(channelFactory.getChannel());
+		sink.setChannelFactory(channelFactory);
 		return sink;
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_MYSQL)
+	@ConditionalOnProperty(name="sink.type", havingValue=MysqlSink.SINK_MYSQL)
 	public MysqlSinkDao mysqlSinkDao(){
 		return new MysqlSinkDao();
 	}

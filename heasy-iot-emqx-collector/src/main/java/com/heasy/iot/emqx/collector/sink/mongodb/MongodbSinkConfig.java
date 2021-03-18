@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.heasy.iot.emqx.collector.channel.ChannelFactory;
-import com.heasy.iot.emqx.collector.sink.Sink;
 
 @Configuration
 @PropertySource("classpath:collector.properties")
@@ -20,12 +19,12 @@ public class MongodbSinkConfig{
 	private String collectionName;
 	
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_MONGODB)
+	@ConditionalOnProperty(name="sink.type", havingValue=MongodbSink.SINK_MONGODB)
 	public MongodbSink createSink(ChannelFactory channelFactory){
 		logger.debug("create MongodbSink: " + channelFactory);
 		MongodbSink sink = new MongodbSink();
 		sink.setCollectionName(collectionName);
-		sink.setChannel(channelFactory.getChannel());
+		sink.setChannelFactory(channelFactory);
 		return sink;
 	}
 }

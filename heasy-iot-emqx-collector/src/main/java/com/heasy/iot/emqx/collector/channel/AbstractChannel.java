@@ -22,7 +22,7 @@ public abstract class AbstractChannel implements Channel {
 		return lifecycleState;
 	}
 	
-	public void setLifecycleState(LifecycleState lifecycleState) {
+	public synchronized void setLifecycleState(LifecycleState lifecycleState) {
 		this.lifecycleState = lifecycleState;
 	}
 

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.reflections.Reflections;
@@ -36,13 +38,17 @@ public class DefaultChannelFactory implements ChannelFactory, InitializingBean, 
     private String channelDefaultType;
 	
 	private Map<String, Channel> channels = new HashMap<>();
+	private ExecutorService service;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		logger.info("init DefaultChannelFactory...");
 		
+		service = Executors.newSingleThreadExecutor();
+		
 		if(StringUtil.isNotEmpty(scanBasePaths)){
 			for(String path : scanBasePaths.split(",")){
+				//根据接口类加载所有Channel对象
 				Set<Class<?extends Channel>> classes = getFullReflections(path).getSubTypesOf(Channel.class);
 				if(CollectionUtils.isNotEmpty(classes)){
 					for(Class clazz : classes){
@@ -50,10 +56,14 @@ public class DefaultChannelFactory implements ChannelFactory, InitializingBean, 
 							continue;
 						}
 						
-						Channel channel = (Channel)clazz.newInstance();
-						if(!channels.containsKey(channel.getName())){
-							channel.start();
-							channels.put(channel.getName(), channel);
+						try{
+							Channel channel = (Channel)clazz.newInstance();
+							if(!channels.containsKey(channel.getName())){
+								channel.start();
+								channels.put(channel.getName(), channel);
+							}
+						}catch(Exception ex){
+							logger.error("start channel error", ex);
 						}
 					}
 				}
@@ -69,7 +79,21 @@ public class DefaultChannelFactory implements ChannelFactory, InitializingBean, 
 	@Override
 	public Channel getChannel(String name) {
 		if(channels.containsKey(name)){
-			return channels.get(name);
+			AbstractChannel channel = (AbstractChannel)channels.get(name);
+			
+			if(channel.getLifecycleState() != LifecycleState.START){
+				service.execute(() -> {
+					try{
+						logger.error("重启Channel: " + channel.getName() + "...");
+						channel.stop();
+						channel.start();
+					}catch(Exception ex){
+						logger.error("restart channel error", ex);
+					}
+				});
+			}else{
+				return channel;
+			}
 		}
 		return null;
 	}
@@ -77,6 +101,10 @@ public class DefaultChannelFactory implements ChannelFactory, InitializingBean, 
 	@Override
 	public void destroy() throws Exception {
 		logger.info("destroy DefaultChannelFactory...");
+		
+		if(service != null){
+			service.shutdown();
+		}
 		
 		if(channels != null){
 			for(Entry<String, Channel> entry : channels.entrySet()){

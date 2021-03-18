@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.heasy.iot.emqx.collector.sink.AbstractSink;
-import com.heasy.iot.emqx.collector.sink.Sink;
 
 public class MongodbSink extends AbstractSink{
+	public static final String SINK_MONGODB = "mongodb";
 	private String collectionName; //集合名
 	
 	@Autowired
 	MongoTemplate mongoTemplate;
-	
+
 	public MongodbSink(){
-		super(Sink.SINK_MONGODB);
+		super(MongodbSink.SINK_MONGODB);
 	}
 	
 	@Override

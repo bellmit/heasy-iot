@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.heasy.iot.emqx.collector.channel.ChannelFactory;
-import com.heasy.iot.emqx.collector.sink.Sink;
 
 @Configuration
 @PropertySource("classpath:collector.properties")
@@ -16,11 +15,11 @@ public class LoggerSinkConfig{
     private static final Logger logger = LoggerFactory.getLogger(LoggerSinkConfig.class);
     
 	@Bean
-	@ConditionalOnProperty(name="sink.type", havingValue=Sink.SINK_LOGGER)
+	@ConditionalOnProperty(name="sink.type", havingValue=LoggerSink.SINK_LOGGER)
 	public LoggerSink createSink(ChannelFactory channelFactory){
 		logger.debug("create LoggerSink: " + channelFactory);
 		LoggerSink sink = new LoggerSink();
-		sink.setChannel(channelFactory.getChannel());
+		sink.setChannelFactory(channelFactory);
 		return sink;
 	}
 }
