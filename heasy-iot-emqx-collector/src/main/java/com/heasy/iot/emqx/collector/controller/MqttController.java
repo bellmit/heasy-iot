@@ -48,4 +48,10 @@ public class MqttController{
 		
 		return ResponseEntity.ok(null);
 	}
+    
+	@RequestMapping(value="/test", method=RequestMethod.POST)
+	public ResponseEntity<String> test(@RequestBody String content){
+		logger.debug(content);
+		return ResponseEntity.ok(null);
+	}
 }
